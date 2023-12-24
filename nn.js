@@ -51,32 +51,26 @@ class NeuralNetwork {
 
     }
 
+    predict(input_array) {
 
-
-    feedforward(input_array) {
-
-
-        //generating the hidden outputs
-
+        // Generating the Hidden Outputs
         let inputs = Matrix.fromArray(input_array);
         let hidden = Matrix.multiply(this.weights_ih, inputs);
-
         hidden.add(this.bias_h);
-
-        // activation function
-
-        hidden.map(sigmoid);
-
-        // generating the output's output
-
+        // activation function!
+        hidden.map(this.activation_function.func);
+    
+        // Generating the output's output!
         let output = Matrix.multiply(this.weights_ho, hidden);
         output.add(this.bias_o);
-        output.map(sigmoid);
-
-
-
+        output.map(this.activation_function.func);
+    
+        // Sending back to the caller!
         return output.toArray();
-    }
+      }
+    
+    
+
 
     setLearningRate(learning_rate = 0.1) {
         this.learning_rate = learning_rate;
