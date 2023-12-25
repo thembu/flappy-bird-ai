@@ -3,11 +3,11 @@ let birds = [];
 let savedBirds = [];
 let pipes = [];
 let counter = 0;
-
+let slider;
 function setup() {
   
   createCanvas(800, 600);
-
+  slider = createSlider(1, 10, 1); 
   for (let i = 0; i < TOTAL; i++) {
     birds[i] = new Bird();
   }
@@ -16,6 +16,8 @@ function setup() {
 
 function draw() {
   background(0);
+
+  for (let n = 0; n < slider.value(); n++) {
 
   if (frameCount % 75 == 0) {
 
@@ -48,6 +50,14 @@ function draw() {
     
   }
 
+
+  for (let i = birds.length-1; i >= 0; i--) {
+    if (birds[i].offscreen()) {
+      savedBirds.push(birds.splice(i, 1)[0]);
+    }
+  }
+
+
   for (let bird of birds) {
     bird.think(pipes);
     bird.update();
@@ -59,6 +69,7 @@ function draw() {
     pipes = [];
 
   }
+}
   
 
   for (let bird of birds) {

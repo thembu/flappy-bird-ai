@@ -28,7 +28,7 @@ class Bird {
       
       else {
 
-        this.brain = new NeuralNetwork(4, 4, 2);
+        this.brain = new NeuralNetwork(5, 8, 2);
 
       }
 
@@ -54,6 +54,10 @@ class Bird {
     }
 
 
+    offscreen() {
+         return (this.y > height || this.y < 0);
+    }
+
     think(pipes) {
         let closest = null;
         let closestD = Infinity;
@@ -78,6 +82,7 @@ class Bird {
          inputs[1] = closest.top/height;
          inputs[2] = closest.bottom/height;
          inputs[3] = closest.x/width;
+         inputs[4] = this.velocity/10;
 
         let output = this.brain.predict(inputs);
         if(output[0] > output[1]) {
@@ -94,14 +99,5 @@ class Bird {
       this.velocity += this.gravity;
       this.y += this.velocity;
   
-      if (this.y >= height - this.height / 2) {
-        this.y = height - this.height / 2;
-        this.velocity = 0;
-      }
-  
-      if (this.y <= this.height / 2) {
-        this.y = this.height / 2;
-        this.velocity = 0;
-      }
     }
   }
