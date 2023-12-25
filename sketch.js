@@ -1,35 +1,45 @@
-// Daniel Shiffman
-// http://codingtra.in
-// http://patreon.com/codingtrain
-// Code for: https://youtu.be/cXgA1d_E-jY
-
-// P5 exported functions (eslint flags)
-/* exported preload, setup, draw, keyPressed */
-
-// Exported sprites (eslint flags)
-/* exported birdSprite, pipeBodySprite, pipePeakSprite */
-
-let bird;
+let TOTAL = 350 ;
+let birds = [];
+let savedBirds = [];
 let pipes = [];
-
+let counter = 0;
 
 function setup() {
+  
   createCanvas(800, 600);
-  bird = new Bird();
-  pipes.push(new Pipe());
+
+  for (let i = 0; i < TOTAL; i++) {
+    birds[i] = new Bird();
+  }
+
 }
 
 function draw() {
   background(0);
 
+  if (frameCount % 75 == 0) {
+
+    pipes.push(new Pipe());
+
+  }
+
+  counter++;
+
+
 
   for (let i = pipes.length-1; i >= 0; i--) {
-   pipes[i].show();
     pipes[i].update();
+    
+    for (let j = birds.length-1; j >= 0; j--) {
+      if (pipes[i].hit(birds[j])) {
+        savedBirds.push(birds.splice(j, 1)[0]);
+      }
+    }
 
-    if(pipes[i].hit(bird)) {
-      console.log("HIT");
-    } 
+
+    // if(pipes[i].hit(bird)) {
+    //   console.log("HIT");
+    // } 
 
     if(pipes[i].offscreen()) {
       pipes.splice(i, 1);
@@ -38,33 +48,31 @@ function draw() {
     
   }
 
-  bird.think(pipes);
-  bird.update();
-  bird.show();
-
-
-  if (frameCount % 120 == 0) {
-
-    pipes.push(new Pipe());
-
+  for (let bird of birds) {
+    bird.think(pipes);
+    bird.update();
   }
 
+  if(birds.length === 0) {
+    counter = 0; 
+    nextGeneration();
+    pipes = [];
+
+  }
   
+
+  for (let bird of birds) {
+    bird.show();
+  }
+
+  for (let pipe of pipes) {
+    pipe.show();
+  }
+
+
     
-  
 
 
 }
 
-
-function reset() {
-  isOver = false;
-  score = 0;
-  bgX = 0;
-  pipes = [];
-  bird = new Bird();
-  pipes.push(new Pipe());
-  gameoverFrame = frameCount - 1;
-  loop();
-}
 
