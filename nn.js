@@ -176,6 +176,9 @@ class NeuralNetwork {
     this.bias_o.map(mutate);
   }
 
-
-
 }
+
+
+
+
+
